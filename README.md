@@ -2,45 +2,63 @@
 
 ## Description
 
-The aim of this challenge is to build an application that exposes an API accepting and serving
-files. Please document your choices and feel free to ask questions or intermediate code review.
+Write HTTP server for a service that would make http requests to 3rd-party
+services.
+Work algorithm.
+The client sends a task to the service to perform an http request to a 3rd-party
+services. The task is described in json format, the generated task id is returned
+in response and its execution starts in the background.
 
-## Preparation
+Request example to service
+Request:
 
-A docker-compose is available to start a local instance of Minio (https://github.com/minio/minio):
+- POST /task
 
-```yaml
-version: "3"
-services:
-  minio:
-    image: quay.io/minio/minio
-    command:
-      - server
-      - /data
-      - --console-address
-      - :9001
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+```json
+{
+  "method": "GET",
+  "url": "http://google.com",
+  "headers": {
+    "Authentication": "Basic
+    bG9naW46cGFzc3dvcmQ=",
+  }
+}
 ```
 
-After starting the service (docker-compose up -d), it will be available from 127.0.0.1:9000 with the
-default credentials minioadmin:minioadmin.
+Response:
+200 OK
 
-## Implementation
+```json
+{
+  "id": <generated unique id>
+}
+```
 
-The application is written in Go and should:
+The client must have a method that can be used to find out the status of the
+task.
+Request example
+Request:
 
-1. accept files of arbitrary size, encrypt their content, upload them to a Minio bucket
-2. serve the submitted files. Submitting and reading files from the API should be possible
-   using curl.
-3. (bonus) upload the file in chunks of configurable size (e.g. 1MB) in the Minio bucket.
-   This mode should be enabled via a configuration. ([multipart file upload](https://github.com/minio/minio-go/blob/master/api-put-object-multipart.go))
+- GET task/<taskId>
 
-## Delivery
+Response:
 
-Please send us a link to a public Github repository containing your deliverables within 15 days
-after receipt of the challenge.
+200 OK
+
+```json
+{
+    "id": <unique id>,
+    "status": "done/in_process/error/new"
+    "httpStatusCode": <HTTP status of 3rd-party service response>,
+    "headers": {
+        <headers array from 3rd-party service response>
+    },
+    "length": <content length of 3rd-party service response>
+}
+```
+
+We'd like to see code close to production with clear variable names and http
+routes, unit tests, etc.
 
 ## Solution
 
@@ -99,7 +117,7 @@ SERVER_ENVIRONMENT="dev" go run main.go
 
 ### cURL calls
 
-#### Upload Big File
+#### Create Task
 
 ```bash
 curl --location --request POST 'http://localhost:8080/files' \
@@ -112,10 +130,10 @@ curl --location --request POST 'http://localhost:8080/files' \
 }'
 ```
 
-#### Upload Medium File
+#### Get Task status
 
 ```bash
-curl --location --request POST 'http://localhost:8080/files' \
+curl --location --request GET 'http://localhost:8080/files' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "bucketName":"test",
@@ -123,278 +141,4 @@ curl --location --request POST 'http://localhost:8080/files' \
     "filepath": "./testfiles/medium20MiB",
     "contentType": "application/octet-stream"
 }'
-```
-
-#### Upload Small File
-
-```bash
-curl --location --request POST 'http://localhost:8080/files' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "bucketName":"test",
-    "objectName": "small",
-    "filepath": "./testfiles/small10MiB",
-    "contentType": "application/octet-stream"
-}'
-```
-
-#### Upload Very Small File
-
-```bash
-curl --location --request POST 'http://localhost:8080/files' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "bucketName":"test",
-    "objectName": "small",
-    "filepath": "./testfiles/verysmall1MiB",
-    "contentType": "application/octet-stream"
-}'
-```
-
-#### Download File (e.g. Small file)
-
-```bash
-curl --location --request GET 'http://localhost:8080/files/small' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "bucketName": "test",
-    "downloadPath": "/tmp/download1.txt"
-}'
-```
-
-### Multipart Upload
-
-By default minio starts doing multipart upload at 16MiB, one can enforce no multipart upload by setting `minio.PutObjectOptions{DisableMultipart: true}`
-So, by default minio multipart upload enabled and with part-size of 16MiB. ([code](https://github.com/minio/minio-go/blob/6ad2b4a17816b1e991f73e598885c07704aea7ef/api-put-object.go#L302))
-
-The minimum part size is 5MiB ([Part Size Range](https://min.io/docs/minio/container/operations/checklists/thresholds.html))
-[Code reference](https://github.com/minio/minio-go/blob/6ad2b4a17816b1e991f73e598885c07704aea7ef/constants.go#L24)
-
-To enable multipart upload there are 2 parameters in `./config/dev-config.yml`:
-
-1. enable-multipart-upload: true
-2. file-chunk-size: 5
-
-Verify Multipart upload with:
-
-```bash
-mc admin trace -v myminio
-```
-
-Look for:
-
-- `[REQUEST s3.NewMultipartUpload]`
-- `[REQUEST s3.PutObjectPart]` PUT /test/big?partNumber=1
-- `[REQUEST s3.PutObjectPart]` PUT /test/big?partNumber=2
-- `[REQUEST s3.PutObjectPart]` PUT /test/big?partNumber=n
-- `[REQUEST s3.CompleteMultipartUpload]`
-
-e.g. By uploading the big file (100MiB) with part-size of 5MiB there will be 20 parts. (20x `[REQUEST s3.PutObjectPart]`)
-e.g. By uploading the small file (10MiB) with part-size of 5MiB there will be 2 parts. (2x `[REQUEST s3.PutObjectPart]`)
-
-### Enable Server-Side Encryption (SSE)
-
-<a name="kes"></a>
-
-#### Install mc command (Minio Client)
-
-Source: [https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install](https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install)
-
-```bash
-curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-  --create-dirs \
-  -o $HOME/minio-binaries/mc
-
-chmod +x $HOME/minio-binaries/mc
-export PATH=$PATH:$HOME/minio-binaries/
-
-mc --help
-```
-
-##### Set alias
-
-```bash
-mc alias set myminio http://localhost:9000/ ACCESS_KEY SECRET_KEY
-```
-
-Check
-
-```bash
-mc admin info myminio
-```
-
-#### Install kes command
-
-##### Install kes
-
-Source: [https://github.com/minio/kes](https://github.com/minio/kes)
-
-```bash
-curl -sSL --tlsv1.2 'https://github.com/minio/kes/releases/latest/download/kes-linux-amd64' -o $HOME/minio-binaries/kes
-chmod +x $HOME/minio-binaries/kes
-```
-
-#### 1) Create an Encryption Key for SSE-KMS Encryption
-
-```bash
-curl -sSL --tlsv1.2 \
-  -O 'https://raw.githubusercontent.com/minio/kes/master/root.key' \
-  -O 'https://raw.githubusercontent.com/minio/kes/master/root.cert'
-export KES_CLIENT_KEY=kms-identity/root.key
-export KES_CLIENT_CERT=kms-identity/root.cert
-```
-
-#### 2) Point to play instance
-
-```bash
-export KES_SERVER=https://play.min.io:7373
-```
-
-##### Create a new EK through KES
-
-```bash
-kes key create dev-key
-```
-
-This tutorial uses the example my-minio-sse-kms-key name for ease of reference. Specify a unique key name to prevent collision with existing keys. (e.g. dev-key)
-
-#### 2) Configure MinIO for SSE-KMS Object Encryption
-
-Specify the following environment variables in the shell or terminal on each MinIO server host in the deployment (add in the ./docker/minio/docker-compose.yml)
-
-```bash
-export MINIO_KMS_KES_ENDPOINT=https://play.min.io:7373
-export MINIO_KMS_KES_KEY_FILE=root.key
-export MINIO_KMS_KES_CERT_FILE=root.cert
-export MINIO_KMS_KES_KEY_NAME=dev-key
-```
-
-#### 3) Restart the MinIO Deployment to Enable SSE-KMS
-
-```bash
-mc admin service restart myminio
-```
-
-#### 4) Configure Automatic Bucket Encryption (Enable Encryption for the bucket)
-
-```bash
-mc encrypt set sse-kms dev-key myminio/testbucket
-```
-
-**_NOTE:_** to remove automatic encryption on a bucket:
-
-```bash
-mc encrypt clear myminio/testbucket
-```
-
-**_NOTE:_** And then leave this command hanging in a window to show output logs.
-
-```bash
-mc admin trace -v myminio
-```
-
-##### Getting Started Running KES Server (Key Encryption Server)
-
-###### 1. Generate KES Server Private Key & Certificate
-
-```bash
-kes identity new --ip "127.0.0.1" localhost --cert public.crt --key private.key
-```
-
-API Key (secret): kes:v1:AMZWKiawHEsCn30r9t8CV3MvdXVHQ6u4hJvu9q30X0iJ
-Identity: 6d2768043cc2350801ef0fbf9d5854541756841470fefe0d517067d1de5f426a
-
-The identity can be computed again via:
-
-```bash
-kes identity of kes:v1:AMZWKiawHEsCn30r9t8CV3MvdXVHQ6u4hJvu9q30X0iJ
-kes identity of public.crt
-```
-
-###### 2. Generate Client Credentials
-
-```bash
-kes identity new --key=client.key --cert=client.crt MyApp
-```
-
-API Key (secret): kes:v1:AG8LgxNEBAL4aZZvDYzEDA4NKbyog5GMkpvrBgDyUCTr
-Identity: dfeef4d0a2b99cf65fb9ebe61275ae341643ef38cb108738d92ba94d36a81f6c
-
-The identity can be computed again via:
-
-```bash
-kes identity of kes:v1:AG8LgxNEBAL4aZZvDYzEDA4NKbyog5GMkpvrBgDyUCTr
-kes identity of client.crt
-```
-
-###### 3. Configure KES Server
-
-Next, we can create the KES server configuration file: config.yml. Please, make sure that the identity in the policy section matches your client.crt identity.
-
-```yaml
-address: 0.0.0.0:7373 # Listen on all network interfaces on port 7373
-
-admin:
-  identity: dfeef4d0a2b99cf65fb9ebe61275ae341643ef38cb108738d92ba94d36a81f6c # The client.crt identity
-
-tls:
-  key: private.key # The KES server TLS private key
-  cert: public.crt # The KES server TLS certificate
-```
-
-###### 4. Start KES Server
-
-Now, we can start a KES server instance:
-
-```bash
-kes server --config config.yml --auth off
-```
-
-##### Quickstart KES Server
-
-Source: [https://github.com/minio/kes?tab=readme-ov-file#quick-start](https://github.com/minio/kes?tab=readme-ov-file#quick-start)
-
-1. Configure CLI
-
-```bash
-export KES_SERVER=https://play.min.io:7373
-export KES_API_KEY=kes:v1:AD9E7FSYWrMD+VjhI6q545cYT9YOyFxZb7UnjEepYDRc
-```
-
-2. Create a Key
-
-```bash
-kes key create my-key
-```
-
-3. Generate a DEK
-   Derive a new Data Encryption Keys (DEK)
-
-```bash
-kes key dek my-key
-```
-
-<a name="bash"></a>
-
-### Run Bash Script
-
-From Project root:
-
-```bash
-cd scripts
-./installMcAndKes.sh
-```
-
-then set variables:
-
-```bash
-cd scripts
-source setVars.sh
-```
-
-now, check if commands are available
-
-```bash
-mc --help
-kes --help
 ```

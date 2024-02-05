@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/pavva91/file-upload/api"
+	"github.com/pavva91/task-third-party/api"
 )
 
 var (

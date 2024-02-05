@@ -12,8 +12,8 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/pavva91/file-upload/config"
-	"github.com/pavva91/file-upload/server"
+	"github.com/pavva91/task-third-party/config"
+	"github.com/pavva91/task-third-party/server"
 )
 
 func main() {

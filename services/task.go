@@ -4,8 +4,8 @@ package services
 import (
 	"time"
 
-	"github.com/pavva91/file-upload/models"
-	"github.com/pavva91/file-upload/repositories"
+	"github.com/pavva91/task-third-party/models"
+	"github.com/pavva91/task-third-party/repositories"
 )
 
 var (

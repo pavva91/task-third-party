@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/pavva91/file-upload/dto"
-	"github.com/pavva91/file-upload/errorhandlers"
+	"github.com/pavva91/task-third-party/dto"
+	"github.com/pavva91/task-third-party/errorhandlers"
 )
 
 type tasksHandler struct{}

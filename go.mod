@@ -1,4 +1,4 @@
-module github.com/pavva91/file-upload
+module github.com/pavva91/task-third-party
 
 go 1.21.6
 

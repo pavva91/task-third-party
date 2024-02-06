@@ -6,18 +6,17 @@ import (
 )
 
 var (
-	Delegation DelegationRepositer = delegation{}
+	Task Tasker = task{}
 )
 
-type DelegationRepositer interface {
-	Create(task *models.Delegation) (*models.Delegation, error)
-	List() ([]models.Delegation, error)
-	GetByID(id string) (*models.Delegation, error)
+type Tasker interface {
+	Create(task *models.Task) (*models.Task, error)
+	GetByID(id string) (*models.Task, error)
 }
 
-type delegation struct{}
+type task struct{}
 
-func (r delegation) Create(task *models.Delegation) (*models.Delegation, error) {
+func (r task) Create(task *models.Task) (*models.Task, error) {
 	err := db.ORM.GetDB().Create(&task).Error
 	if err != nil {
 		return nil, err
@@ -25,17 +24,8 @@ func (r delegation) Create(task *models.Delegation) (*models.Delegation, error) 
 	return task, nil
 }
 
-func (r delegation) List() ([]models.Delegation, error) {
-	delegations := []models.Delegation{}
-	err := db.ORM.GetDB().Order("timestamp DESC").Find(&delegations).Error
-	if err != nil {
-		return nil, err
-	}
-	return delegations, nil
-}
-
-func (r delegation) GetByID(id string) (*models.Delegation, error) {
-	var task *models.Delegation
+func (r task) GetByID(id string) (*models.Task, error) {
+	var task *models.Task
 	err := db.ORM.GetDB().Where("id = ?", id).First(&task).Error
 	if err != nil {
 		return nil, err

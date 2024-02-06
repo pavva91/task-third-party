@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pavva91/task-third-party/dto"
 	"github.com/pavva91/task-third-party/errorhandlers"
+	"github.com/pavva91/task-third-party/services"
 )
 
 type tasksHandler struct{}
@@ -15,32 +16,44 @@ var (
 	TasksHandler = tasksHandler{}
 )
 
-// var (
-// 	TaskRe         = regexp.MustCompile(`^/task/*$`)
-// 	TaskReWithID   = regexp.MustCompile(`^/task/([a-z0-9]+(?:-[a-z0-9]+)+)$`)
-// 	TaskReWithName = regexp.MustCompile(`^/task/.+$`)
-// )
-
 func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
-	var reqBody dto.CreateTaskRequest
+	var body dto.CreateTaskRequest
 
-	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	err = reqBody.Validate()
+	// TODO: Validation Request JSON
+	err = body.Validate()
 	if err != nil {
 		errorhandlers.BadRequestHandler(w, r, err)
 		return
 	}
 
-	// TODO: Create Task
-	// TODO: Send request to Third-Party (start goroutine)
-	// TODO: Return Task ID
+	// TODO: DTO to Model
+	task := body.ToModel()
 
-	w.Write([]byte("task creation"))
+	// TODO: Create Task
+	// TODO: Service
+	services.Task.Create(task)
+	// TODO: Send request to Third-Party (start goroutine)
+	go services.Task.SendRequest(task)
+
+	// TODO: Return Task ID
+	var res dto.CreateTaskResponse
+	res.ToDto(*task)
+
+	js, err := json.Marshal(task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// w.Write([]byte("task creation"))
+	w.Write(js)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }

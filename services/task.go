@@ -2,27 +2,31 @@
 package services
 
 import (
-	"time"
-
 	"github.com/pavva91/task-third-party/models"
 	"github.com/pavva91/task-third-party/repositories"
 )
 
 var (
-	Delegation DelegationServicer = delegation{}
+	Task Tasker = task{}
 )
 
-type DelegationServicer interface {
-	List(year time.Time) ([]models.Delegation, error)
-	// PollDelegations Fuction that runs asynchronously for polling delegations
-	// Poll(periodInSeconds uint, apiEndpoint string, quitOnError bool, errorOutCh chan<- error, quitOnErrorTrueSignalInCh <-chan struct{}) error
+type Tasker interface {
+	Create(task *models.Task) (*models.Task, error)
+	SendRequest(task *models.Task) (*models.Task, error)
 }
 
-type delegation struct{}
+type task struct{}
 
-func (s delegation) List(year time.Time) ([]models.Delegation, error) {
-	if year.IsZero() {
-		return repositories.Delegation.List()
-	}
-	return repositories.Delegation.List()
+func (s task) Create(task *models.Task) (*models.Task, error) {
+	return repositories.Task.Create(task)
+}
+
+func (s task) SendRequest(task *models.Task) (*models.Task, error) {
+	// TODO: send request to third-party service
+	// TODO: create http client
+	// TODO: update task state accordingly
+	// TODO: send request to third-party service
+	// TODO: wait for response (this function is run async)
+	// TODO: update task state accordingly
+	return task, nil
 }

@@ -62,57 +62,52 @@ routes, unit tests, etc.
 
 ## Solution
 
+I use PostgreSQL to persist data.
+
 ### Run
 
-1. Copy `./config/example-config.yml` into `./config/dev-config.yml` and put your own values
+#### 1. Copy `./config/example-config.yml` into `./config/dev-config.yml` and put your own values
 
-<a name="minio-docker"></a>
-
-#### 2. Run Minio Docker Container
+#### 2. Create .env for PostgreSQL credentials in `./docker/dev/.env` with this structure:
 
 ```bash
-cd docker/minio
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+#### 3. Run PostgreSQL Docker Container
+
+```bash
+cd docker/dev
 docker-compose up -d
 ```
 
-3. Create `access-key-id` and `secret-access-key` from minio dashboard ([http://127.0.0.1:9001/access-keys/new-account](http://127.0.0.1:9001/access-keys/new-account)) and copy the values inside `./config/dev-config.yml`
-
-4. Create `encryption-key-id` with:
-
-```bash
-kes key create dev-key
-```
-
-And copy the values inside `./config/dev-config.yml`
-
-**_NOTE:_** To quickly install kes and mc I created a bash script in `./scripts/installMcAndKes.sh` ([run bash script](#bash))
-
-**_NOTE:_** Guide to install and configure kes [install mc, kes and configure server side encryption](#kes)
-
-#### Run Test Suite
-
-1. With the [running minio docker container](#minio-docker) (verify with `docker ps`)
-
-2. Create small and big files (inside project root folder):
-
-```bash
-mkdir testfiles
-dd if=/dev/urandom of=./testfiles/verysmall1MiB bs=1M count=1
-dd if=/dev/urandom of=./testfiles/small10MiB bs=1M count=10
-dd if=/dev/urandom of=./testfiles/medium20MiB bs=1M count=20
-dd if=/dev/urandom of=./testfiles/big100MiB bs=1M count=100
-```
-
-3. Run test suite (inside project root folder)
-
-```bash
-go test
-```
-
-#### Run Go Application
+#### 4. Run Go Application
 
 ```bash
 SERVER_ENVIRONMENT="dev" go run main.go
+```
+
+#### Run Test Suite
+
+##### Run with coverage
+
+- Run all test suite and show coverage on browser: `go test ./... -coverprofile cover.out && go tool cover -html=cover.out`
+- Run tests of ./dto and show coverage on browser: `go test -v -coverprofile cover.out ./dto/ && go tool cover -html=cover.out`
+- Run test suite with "data race" detection : `go test --race ./...`
+
+##### Run specific packages tests
+
+- Run all test of the "api" package and show coverage on browser: `go test ./api -coverprofile cover.out && go tool cover -html=cover.out`
+- Run all test of the "dto" package and show coverage on browser: `go test ./dto -coverprofile cover.out && go tool cover -html=cover.out`
+- Run all test of the "services" package and show coverage on browser: `go test ./services -coverprofile cover.out && go tool cover -html=cover.out`
+- Run all test of the "repositories" package and show coverage on browser: `go test ./repositories -coverprofile cover.out && go tool cover -html=cover.out`
+- Run all test of the "utilities" package and show coverage on browser: `go test ./utilities -coverprofile cover.out && go tool cover -html=cover.out`
+
+##### Run all test suite
+
+```bash
+go test
 ```
 
 ### cURL calls

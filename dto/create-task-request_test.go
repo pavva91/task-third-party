@@ -41,6 +41,23 @@ func TestCreateTaskRequest_Validate(t *testing.T) {
 			},
 			true,
 		},
+		"valid request body without headers": {
+			fields{
+				URL:    "https://example.com",
+				Method: "GET",
+			},
+			false,
+		},
+		"valid request body with headers": {
+			fields{
+				Headers: datatypes.JSONMap(map[string]interface{}{
+					"Authentication": "valid",
+				}),
+				URL:    "https://example.com",
+				Method: "GET",
+			},
+			false,
+		},
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {

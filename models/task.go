@@ -1,10 +1,18 @@
 package models
 
-import "github.com/pavva91/task-third-party/enums"
+import (
+	"github.com/pavva91/task-third-party/enums"
+	"gorm.io/datatypes"
+)
 
 type Task struct {
 	ID             uint
-	HttpStatusCode uint // <HTTP status of 3rd-party service response>
-	Headers        string // <headers array from 3rd-party service response>
-	Status         enums.TaskStatus `gorm:"default:0"`
+	URL            string
+	Method         string
+	HttpStatusCode int // <HTTP status of 3rd-party service response>
+	// TODO: ReqHeaders data structure (array of key value pairs)
+	ReqHeaders datatypes.JSONMap
+	ResHeaders datatypes.JSONMap
+	Status     enums.TaskStatus `gorm:"default:0"`
+	Length     int
 }

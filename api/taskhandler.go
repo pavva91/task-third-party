@@ -2,12 +2,16 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/pavva91/task-third-party/dto"
 	"github.com/pavva91/task-third-party/errorhandlers"
 	"github.com/pavva91/task-third-party/services"
+	"gorm.io/datatypes"
 )
 
 type tasksHandler struct{}
@@ -21,31 +25,35 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		if err.Error() == "EOF" {
+			err = errors.New("insert valid json body")
+		}
+		errorhandlers.BadRequestHandler(w, r, err)
 		return
 	}
 
-	// TODO: Validation Request JSON
 	err = body.Validate()
 	if err != nil {
 		errorhandlers.BadRequestHandler(w, r, err)
 		return
 	}
 
-	// TODO: DTO to Model
 	task := body.ToModel()
+	task.ResHeaders = datatypes.JSONMap(make(map[string]interface{}))
 
-	// TODO: Create Task
-	// TODO: Service
-	services.Task.Create(task)
-	// TODO: Send request to Third-Party (start goroutine)
+	_, err = services.Task.Create(task)
+	if err != nil {
+		log.Println(err)
+		errorhandlers.InternalServerErrorHandler(w, r)
+		return
+	}
+
 	go services.Task.SendRequest(task)
 
-	// TODO: Return Task ID
 	var res dto.CreateTaskResponse
 	res.ToDto(*task)
 
-	js, err := json.Marshal(task)
+	js, err := json.Marshal(res)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -53,19 +61,40 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	// w.Write([]byte("task creation"))
 	w.Write(js)
-
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
 }
 
-func (h tasksHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-	// TODO: Get Task by ID
-	// w.Write([]byte("1234"))
-	w.Write([]byte(id))
+func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
+	strID := mux.Vars(r)["id"]
+
+	i, err := strconv.Atoi(strID)
+	if err != nil {
+		errorhandlers.BadRequestHandler(w, r, err)
+		return
+	}
+	id := uint(i)
+
+	task, err := services.Task.GetByID(id)
+	if err != nil {
+		errorhandlers.BadRequestHandler(w, r, err)
+		return
+	}
+
+	var res dto.GetTaskResponse
+	res.ToDto(*task)
+
+	js, err := json.Marshal(res)
+	if err != nil {
+		log.Println(err.Error())
+		errorhandlers.InternalServerErrorHandler(w, r)
+		return
+	}
+
+	w.Write(js)
+	w.Header().Set("Content-Type", "application/json")
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("home"))
 }
-

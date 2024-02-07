@@ -1,7 +1,7 @@
 # Database credentials
 database:
   connections: 10
-  db-name: "<your-db-name>"
+  name: "<your-db-name>"
   host: "localhost"
   pass: "<your-db-pass>"
   port: 5432

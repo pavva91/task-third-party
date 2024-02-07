@@ -11,6 +11,7 @@ var (
 
 type Tasker interface {
 	Create(task *models.Task) (*models.Task, error)
+	UpdateTask(task *models.Task) (*models.Task, error)
 	GetByID(id string) (*models.Task, error)
 }
 
@@ -18,6 +19,14 @@ type task struct{}
 
 func (r task) Create(task *models.Task) (*models.Task, error) {
 	err := db.ORM.GetDB().Create(&task).Error
+	if err != nil {
+		return nil, err
+	}
+	return task, nil
+}
+
+func (r task) UpdateTask(task *models.Task) (*models.Task, error) {
+	err := db.ORM.GetDB().Updates(&task).Error
 	if err != nil {
 		return nil, err
 	}

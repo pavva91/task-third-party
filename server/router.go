@@ -17,8 +17,9 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("/", api.HomeHandler)
 
 	s := r.PathPrefix("/task").Subrouter()
+	s.HandleFunc("", api.TasksHandler.CreateTask).Methods("POST")
 	s.HandleFunc("/", api.TasksHandler.CreateTask).Methods("POST")
-	s.HandleFunc("/{id:[0-9]+}", api.TasksHandler.GetStatus).Methods("GET")
+	s.HandleFunc("/{id:[0-9]+}", api.TasksHandler.GetByID).Methods("GET")
 
 	return r
 }

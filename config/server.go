@@ -6,7 +6,7 @@ var ServerConfigValues ServerConfig
 type ServerConfig struct {
 	Database struct {
 		Connections int    `yaml:"connections" env:"DB_CONNECTIONS" env-description:"Total number of database connections"`
-		Name        string `yaml:"dbName" env:"DB_NAME" env-description:"Database name"`
+		Name        string `yaml:"name" env:"DB_NAME" env-description:"Database name"`
 		Host        string `yaml:"host" env:"DB_HOST" env-description:"Database host"`
 		Password    string `yaml:"pass"  env:"DB_PASSWORD" env-description:"db password"`
 		Port        string `yaml:"port" env:"DB_PORT" env-description:"Database port"`

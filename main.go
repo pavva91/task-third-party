@@ -13,6 +13,8 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/pavva91/task-third-party/config"
+	"github.com/pavva91/task-third-party/db"
+	"github.com/pavva91/task-third-party/models"
 	"github.com/pavva91/task-third-party/server"
 )
 
@@ -20,6 +22,16 @@ func main() {
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
+
+	isDebug := false
+	if len(os.Args) == 2 {
+		debugArg := os.Args[1]
+		if debugArg == "d" || debugArg == "debug" {
+			os.Setenv("SERVER_ENVIRONMENT", "dev")
+			isDebug = true
+		}
+	}
+	log.Println(fmt.Sprintf("debug mode: %t", isDebug))
 
 	// r := mux.NewRouter()
 	r := server.NewRouter()
@@ -39,15 +51,19 @@ func main() {
 		log.Panic(fmt.Sprintf("Incorrect Dev Environment: %s\nInterrupt execution", env))
 	}
 
-	// Run the server
+	// connect to db
+	db.ORM.MustConnectToDB(config.ServerConfigValues)
+	db.ORM.GetDB().AutoMigrate(
+		&models.Task{},
+	)
+
+	// run the server
 	fmt.Printf("Server is running on port %s", config.ServerConfigValues.Server.Port)
-	// http.ListenAndServe(fmt.Sprintf(":%s", config.ServerConfigValues.Server.Port), mux)
-	// addr := fmt.Sprint("0.0.0.0:" + config.ServerConfigValues.Server.Port)
 	addr := fmt.Sprint("127.0.0.1:" + config.ServerConfigValues.Server.Port)
 
 	srv := &http.Server{
 		// Addr: "0.0.0.0:8080",
-		Addr:addr,
+		Addr: addr,
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,

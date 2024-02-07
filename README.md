@@ -1,5 +1,7 @@
 # Programming Challenge: third party task
 
+[![Go](https://github.com/pavva91/task-third-party/actions/workflows/go.yml/badge.svg)](https://github.com/pavva91/task-third-party/actions/workflows/go.yml)
+
 ## Description
 
 Write HTTP server for a service that would make http requests to 3rd-party
@@ -19,8 +21,7 @@ Request:
   "method": "GET",
   "url": "http://google.com",
   "headers": {
-    "Authentication": "Basic
-    bG9naW46cGFzc3dvcmQ=",
+    "Authentication": "Basic bG9naW46cGFzc3dvcmQ=",
   }
 }
 ```
@@ -94,15 +95,8 @@ SERVER_ENVIRONMENT="dev" go run main.go
 
 - Run all test suite and show coverage on browser: `go test ./... -coverprofile cover.out && go tool cover -html=cover.out`
 - Run tests of ./dto and show coverage on browser: `go test -v -coverprofile cover.out ./dto/ && go tool cover -html=cover.out`
-- Run test suite with "data race" detection : `go test --race ./...`
-
-##### Run specific packages tests
-
-- Run all test of the "api" package and show coverage on browser: `go test ./api -coverprofile cover.out && go tool cover -html=cover.out`
 - Run all test of the "dto" package and show coverage on browser: `go test ./dto -coverprofile cover.out && go tool cover -html=cover.out`
-- Run all test of the "services" package and show coverage on browser: `go test ./services -coverprofile cover.out && go tool cover -html=cover.out`
-- Run all test of the "repositories" package and show coverage on browser: `go test ./repositories -coverprofile cover.out && go tool cover -html=cover.out`
-- Run all test of the "utilities" package and show coverage on browser: `go test ./utilities -coverprofile cover.out && go tool cover -html=cover.out`
+- Run test suite with "data race" detection : `go test --race ./...`
 
 ##### Run all test suite
 

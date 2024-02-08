@@ -24,7 +24,7 @@ func SendRequest(task *models.Task) (*models.Task, error) {
 		repositories.Task.UpdateTask(task)
 
 		log.Println(err)
-		return nil, err
+		return task, err
 	}
 	// headers := datatypes.JSONQuery("headers")
 	log.Println("Authorization value:", task.ReqHeaders)
@@ -37,12 +37,12 @@ func SendRequest(task *models.Task) (*models.Task, error) {
 	res, err := client.Do(req)
 	if err != nil {
 		task.Status = enums.Error
-		task.HttpStatusCode = res.StatusCode
+		task.HttpStatusCode = -1
 		task.Length = -1
 		repositories.Task.UpdateTask(task)
 
 		log.Println(err)
-		return nil, err
+		return task, err
 	}
 	log.Println("response status", res.Status)
 
@@ -58,7 +58,7 @@ func SendRequest(task *models.Task) (*models.Task, error) {
 		repositories.Task.UpdateTask(task)
 
 		log.Println(err)
-		return nil, err
+		return task, err
 	}
 
 	task.Length = len(resBodyBytes)

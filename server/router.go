@@ -14,8 +14,6 @@ func NewRouter() *mux.Router {
 	// TODO: CORS
 
 	// NOTE: Routes
-	r.HandleFunc("/", api.HomeHandler)
-
 	task := r.PathPrefix("/task").Subrouter()
 	task.HandleFunc("", api.TasksHandler.CreateTask).Methods("POST")
 	task.HandleFunc("/", api.TasksHandler.CreateTask).Methods("POST")

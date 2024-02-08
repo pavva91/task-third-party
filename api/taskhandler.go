@@ -48,7 +48,7 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	go services.Task.SendRequest(task)
+	go services.SendRequest(task)
 
 	var res dto.CreateTaskResponse
 	res.ToDto(*task)
@@ -59,10 +59,8 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// w.Write([]byte("task creation"))
 	w.Write(js)
 	w.Header().Set("Content-Type", "application/json")
-	// w.WriteHeader(http.StatusOK)
 }
 
 func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -93,8 +91,4 @@ func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(js)
 	w.Header().Set("Content-Type", "application/json")
-}
-
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("home"))
 }

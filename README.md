@@ -21,7 +21,7 @@ Request:
   "method": "GET",
   "url": "http://google.com",
   "headers": {
-    "Authentication": "Basic bG9naW46cGFzc3dvcmQ=",
+    "Authentication": "Basic bG9naW46cGFzc3dvcmQ="
   }
 }
 ```
@@ -101,7 +101,7 @@ SERVER_ENVIRONMENT="dev" go run main.go
 ##### Run all test suite
 
 ```bash
-go test
+go test ./...
 ```
 
 ### cURL calls
@@ -109,25 +109,20 @@ go test
 #### Create Task
 
 ```bash
-curl --location --request POST 'http://localhost:8080/files' \
+curl --location --request POST 'http://localhost:8080/task' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "bucketName":"test",
-    "objectName": "big",
-    "filepath": "./testfiles/big100MiB",
-    "contentType": "application/octet-stream"
+    "method": "GET",
+    "url": "https://example.com",
+    "headers": {
+        "Authentication": "Basic bG9naW46cGFzc3dvcmQ="
+    }
 }'
 ```
 
 #### Get Task status
 
 ```bash
-curl --location --request GET 'http://localhost:8080/files' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "bucketName":"test",
-    "objectName": "medium",
-    "filepath": "./testfiles/medium20MiB",
-    "contentType": "application/octet-stream"
-}'
+curl --location --request GET 'http://localhost:8080/task/1' \
+--header 'Content-Type: application/json'
 ```

@@ -104,6 +104,12 @@ SERVER_ENVIRONMENT="dev" go run main.go
 go test ./...
 ```
 
+### Swagger API
+
+A Swagger API is available at:
+
+- [http://localhost:8080/swagger/index.html#/](http://localhost:8080/swagger/index.html#/)
+
 ### cURL calls
 
 #### Create Task

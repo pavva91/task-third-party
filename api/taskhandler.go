@@ -21,6 +21,18 @@ var (
 	TasksHandler = tasksHandler{}
 )
 
+// Create Task godoc
+//
+//	@Summary		Create Task
+//	@Description	Create a Task
+//	@Tags			Task
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.CreateTaskRequest	true	"query params"
+//	@Success		200		{object}	dto.CreateTaskResponse
+//	@Failure		400		{object}	string
+//	@Failure		500		{object}	string
+//	@Router			/task [post]
 func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	var body dto.CreateTaskRequest
 
@@ -64,6 +76,19 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
+// Get Task godoc
+//
+//	@Summary		Get Task
+//	@Description	Get a Task, given the id
+//	@Tags			Task
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Task ID"	Format(integer)
+//	@Success		200	{object}	dto.GetTaskResponse
+//	@Failure		400	{object}	string
+//	@Failure		404	{object}	string
+//	@Failure		500	{object}	string
+//	@Router			/task/{id} [get]
 func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	strID := mux.Vars(r)["id"]
 

@@ -8,7 +8,7 @@ var (
 	Router *mux.Router
 )
 
-func NewRouter(){
+func NewRouter() {
 	Router = mux.NewRouter()
 
 	initializeRoutes()

@@ -339,15 +339,15 @@ func TestCreateTaskRequest_ToModel(t *testing.T) {
 		want   *models.Task
 	}{
 		// TODO: Add test cases.
-		"ok":{
+		"ok": {
 			fields{
-				Method: "",
-				URL: "",
+				Method:  "",
+				URL:     "",
 				Headers: map[string]interface{}{},
 			},
 			&models.Task{
-				Method: "",
-				URL: "",
+				Method:     "",
+				URL:        "",
 				ReqHeaders: map[string]interface{}{},
 			},
 		},

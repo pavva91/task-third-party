@@ -24,14 +24,6 @@ import (
 //	@title			Task Third Party HTTP Server
 //	@version		1.0
 //	@description	HTTP server for a service that makes http requests to 3rd-party services
-//	@termsOfService	http://swagger.io/terms/
-
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	support@swagger.io
-
-//	@license.name	Apache 2.0
-//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host	localhost:8080
 func main() {
@@ -52,8 +44,6 @@ func main() {
 	api.NewRouter()
 
 	api.Router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
-		// httpSwagger.URL("http://localhost:8080/swagger/doc.json"), //The url pointing to API definition
-		// httpSwagger.URL("http://localhost:8080/swagger/index.html"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("swagger-ui"),

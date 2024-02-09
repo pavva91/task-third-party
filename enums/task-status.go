@@ -14,7 +14,7 @@ const (
 	Error     TaskStatus = 3
 )
 
-func (t TaskStatus) ToString() (str string) {
+func (t TaskStatus) Itoa() (str string) {
 	switch t {
 	case 0:
 		return "new"

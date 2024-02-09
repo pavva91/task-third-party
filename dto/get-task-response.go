@@ -14,7 +14,7 @@ type GetTaskResponse struct {
 
 func (dto *GetTaskResponse) ToDto(model models.Task) {
 	dto.ID = model.ID
-	dto.Status = model.Status.ToString()
+	dto.Status = model.Status.Itoa()
 	dto.HttpStatusCode = model.HttpStatusCode
 	dto.Headers = model.ResHeaders
 	dto.Length = model.Length

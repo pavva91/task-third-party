@@ -18,7 +18,6 @@ func TestCreateTaskRequest_Validate(t *testing.T) {
 		fields  fields
 		wantErr bool
 	}{
-		// TODO: Add test cases.
 		"invalid header": {
 			fields{
 				Headers: datatypes.JSONMap(map[string]interface{}{
@@ -335,15 +334,26 @@ func TestCreateTaskRequest_ToModel(t *testing.T) {
 		URL     string
 		Headers map[string]interface{}
 	}
-	tests := []struct {
-		name   string
+	tests := map[string]struct {
 		fields fields
 		want   *models.Task
 	}{
 		// TODO: Add test cases.
+		"ok":{
+			fields{
+				Method: "",
+				URL: "",
+				Headers: map[string]interface{}{},
+			},
+			&models.Task{
+				Method: "",
+				URL: "",
+				ReqHeaders: map[string]interface{}{},
+			},
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
 			dto := &CreateTaskRequest{
 				Method:  tt.fields.Method,
 				URL:     tt.fields.URL,

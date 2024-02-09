@@ -1,11 +1,11 @@
 # Database credentials
 database:
-  connections: 10
-  name: "<your-db-name>"
   host: "localhost"
-  pass: "<your-db-pass>"
   port: 5432
+  name: "<your-db-name>"
   user: "postgres"
+  pass: "<your-db-pass>"
+  connections: 10
 
 # Server configurations
 server:

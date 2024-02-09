@@ -71,7 +71,7 @@ func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 		expectedError,
 	}
 	t.Run("no schema url", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return
@@ -156,7 +156,7 @@ func Test_SendRequest_Error_WrongSchemaURL(t *testing.T) {
 		expectedError,
 	}
 	t.Run("wrong schema url", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return
@@ -242,7 +242,7 @@ func Test_SendRequest_Error_URLMissingSlash(t *testing.T) {
 		expectedError,
 	}
 	t.Run("missing slash url", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return
@@ -330,7 +330,7 @@ func Test_SendRequest_Error500(t *testing.T) {
 		false,
 	}
 	t.Run("3rd returns 500", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return
@@ -425,7 +425,7 @@ func Test_SendRequest_ThirdPartyDown(t *testing.T) {
 		expectedError,
 	}
 	t.Run("3rd returns 500", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return
@@ -518,7 +518,7 @@ func Test_SendRequest_OK200(t *testing.T) {
 		false,
 	}
 	t.Run("3rd returns 200", func(t *testing.T) {
-		got, err := SendRequest(test.args.task)
+		got, err := Client.SendRequest(test.args.task)
 		if (err != nil) != test.wantErr {
 			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
 			return

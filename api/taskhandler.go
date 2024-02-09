@@ -12,6 +12,7 @@ import (
 	"github.com/pavva91/task-third-party/errorhandlers"
 	"github.com/pavva91/task-third-party/services"
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 )
 
 type tasksHandler struct{}
@@ -41,14 +42,14 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	task := body.ToModel()
 	task.ResHeaders = datatypes.JSONMap(make(map[string]interface{}))
 
-	_, err = services.Task.Create(task)
+	task, err = services.Task.Create(task)
 	if err != nil {
 		log.Println(err)
 		errorhandlers.InternalServerErrorHandler(w, r)
 		return
 	}
 
-	go services.SendRequest(task)
+	go services.Client.SendRequest(task)
 
 	var res dto.CreateTaskResponse
 	res.ToDto(*task)
@@ -68,13 +69,19 @@ func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 
 	i, err := strconv.Atoi(strID)
 	if err != nil {
-		errorhandlers.BadRequestHandler(w, r, err)
+		log.Println(err)
+		errorhandlers.BadRequestHandler(w, r, errors.New("insert valid id"))
 		return
 	}
 	id := uint(i)
 
 	task, err := services.Task.GetByID(id)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			errorhandlers.NotFoundHandler(w, r, err)
+			return
+		}
+
 		errorhandlers.BadRequestHandler(w, r, err)
 		return
 	}

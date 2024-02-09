@@ -12,10 +12,10 @@ import (
 
 	"gopkg.in/yaml.v2"
 
+	"github.com/pavva91/task-third-party/api"
 	"github.com/pavva91/task-third-party/config"
 	"github.com/pavva91/task-third-party/db"
 	"github.com/pavva91/task-third-party/models"
-	"github.com/pavva91/task-third-party/server"
 )
 
 func main() {
@@ -33,9 +33,8 @@ func main() {
 	}
 	log.Println(fmt.Sprintf("debug mode: %t", isDebug))
 
-	// r := mux.NewRouter()
-	r := server.NewRouter()
-	// Add your routes as needed
+	api.NewRouter()
+
 	env := os.Getenv("SERVER_ENVIRONMENT")
 
 	log.Println(fmt.Sprintf("Running Environment: %s", env))
@@ -68,7 +67,7 @@ func main() {
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-		Handler:      r, // Pass our instance of gorilla/mux in.
+		Handler:      api.Router, // Pass our instance of gorilla/mux in.
 	}
 
 	// Run our server in a goroutine so that it doesn't block.

@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pavva91/task-third-party/dto"
+	"github.com/pavva91/task-third-party/enums"
 	"github.com/pavva91/task-third-party/errorhandlers"
 	"github.com/pavva91/task-third-party/services"
 	"gorm.io/datatypes"
@@ -53,6 +54,7 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	task := body.ToModel()
 	task.ResHeaders = datatypes.JSONMap(make(map[string]interface{}))
+	task.Status = enums.New
 
 	task, err = services.Task.Create(task)
 	if err != nil {

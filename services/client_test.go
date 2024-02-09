@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +13,58 @@ import (
 	"github.com/pavva91/task-third-party/stubs"
 	"gorm.io/datatypes"
 )
+
+func Test_SendRequest_Error_UpdateTaskError(t *testing.T) {
+	expectedError := "stub error"
+
+	taskStub := &models.Task{
+		ID:         1,
+		URL:        "",
+		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
+		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
+			"foo": "alpha",
+			"bar": "beta",
+		}),
+	}
+
+	taskRepositoryStub := stubs.TaskRepository{}
+	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
+		return nil, errors.New("stub error")
+	}
+	repositories.Task = taskRepositoryStub
+
+	type args struct {
+		task *models.Task
+	}
+	test := struct {
+		args     args
+		want     *models.Task
+		wantErr  bool
+		errorMsg string
+	}{
+		args{
+			taskStub,
+		},
+		nil,
+		true,
+		expectedError,
+	}
+	t.Run("error updating record db", func(t *testing.T) {
+		got, err := Client.SendRequest(test.args.task)
+		if (err != nil) != test.wantErr {
+			t.Errorf("SendRequest() error = %v, wantErr %v", err, test.wantErr)
+			return
+		}
+		if got != test.want || got != nil {
+			t.Errorf("SendRequest() = %v, want %v", got, test.want)
+		}
+		if err != nil {
+			if err.Error() != test.errorMsg {
+				t.Errorf("SendRequest() = %v, want %v", err.Error(), test.errorMsg)
+			}
+		}
+	})
+}
 
 func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 	wrongURL := "/wrong.url"
@@ -44,11 +97,6 @@ func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 	}
 
 	taskRepositoryStub := stubs.TaskRepository{}
-	taskRepositoryStub.CreateFn = func(*models.Task) (*models.Task, error) {
-		return taskStub, nil
-	}
-	repositories.Task = taskRepositoryStub
-
 	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}
@@ -129,11 +177,6 @@ func Test_SendRequest_Error_WrongSchemaURL(t *testing.T) {
 	}
 
 	taskRepositoryStub := stubs.TaskRepository{}
-	taskRepositoryStub.CreateFn = func(*models.Task) (*models.Task, error) {
-		return taskStub, nil
-	}
-	repositories.Task = taskRepositoryStub
-
 	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}
@@ -215,11 +258,6 @@ func Test_SendRequest_Error_URLMissingSlash(t *testing.T) {
 	}
 
 	taskRepositoryStub := stubs.TaskRepository{}
-	taskRepositoryStub.CreateFn = func(*models.Task) (*models.Task, error) {
-		return taskStub, nil
-	}
-	repositories.Task = taskRepositoryStub
-
 	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}
@@ -299,15 +337,10 @@ func Test_SendRequest_Error500(t *testing.T) {
 			"Date":           "[Thu, 08 Feb 2024 00:00:50 GMT]",
 		}),
 		HttpStatusCode: 500,
-		Status:         enums.Done,
+		Status:         enums.Error,
 	}
 
 	taskRepositoryStub := stubs.TaskRepository{}
-	taskRepositoryStub.CreateFn = func(*models.Task) (*models.Task, error) {
-		return taskStub, nil
-	}
-	repositories.Task = taskRepositoryStub
-
 	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}
@@ -491,11 +524,6 @@ func Test_SendRequest_OK200(t *testing.T) {
 	}
 
 	taskRepositoryStub := stubs.TaskRepository{}
-	taskRepositoryStub.CreateFn = func(*models.Task) (*models.Task, error) {
-		return taskStub, nil
-	}
-	repositories.Task = taskRepositoryStub
-
 	taskRepositoryStub.UpdateTaskFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}

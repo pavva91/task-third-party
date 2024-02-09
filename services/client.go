@@ -22,6 +22,14 @@ type Clienter interface {
 type client struct{}
 
 func (s client) SendRequest(task *models.Task) (*models.Task, error) {
+
+	task.Status = enums.InProcess
+	_, err := repositories.Task.UpdateTask(task)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	client := http.Client{
 		Timeout: 60 * time.Second,
 	}
@@ -71,9 +79,17 @@ func (s client) SendRequest(task *models.Task) (*models.Task, error) {
 		return task, err
 	}
 
-	task.Length = len(resBodyBytes)
-	task.HttpStatusCode = res.StatusCode
+	if res.StatusCode != 200 {
+		task.Status = enums.Error
+		task.HttpStatusCode = res.StatusCode
+		task.Length = len(resBodyBytes)
+		repositories.Task.UpdateTask(task)
+		return task, err
+	}
+
 	task.Status = enums.Done
+	task.HttpStatusCode = res.StatusCode
+	task.Length = len(resBodyBytes)
 	repositories.Task.UpdateTask(task)
 	return task, nil
 }

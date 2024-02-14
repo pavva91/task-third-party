@@ -138,3 +138,21 @@ curl --location --request GET 'http://localhost:8080/task/1' \
 ```bash
 staticcheck ./...
 ```
+
+#### Metalinter
+
+Useful meta-linter:
+
+- [https://golangci-lint.run/](https://golangci-lint.run/)
+
+##### Install
+
+```bash
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.56.1
+```
+
+##### Run
+
+```bash
+golangci-lint run
+```

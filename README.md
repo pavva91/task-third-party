@@ -132,3 +132,9 @@ curl --location --request POST 'http://localhost:8080/task' \
 curl --location --request GET 'http://localhost:8080/task/1' \
 --header 'Content-Type: application/json'
 ```
+
+### Run linter
+
+```bash
+staticcheck ./...
+```

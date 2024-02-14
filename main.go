@@ -39,7 +39,7 @@ func main() {
 			isDebug = true
 		}
 	}
-	log.Println(fmt.Sprintf("debug mode: %t", isDebug))
+	log.Printf("debug mode: %t", isDebug)
 
 	api.NewRouter()
 
@@ -51,17 +51,18 @@ func main() {
 
 	env := os.Getenv("SERVER_ENVIRONMENT")
 
-	log.Println(fmt.Sprintf("Running Environment: %s", env))
+	log.Printf("Running Environment: %s", env)
 
 	switch env {
 	case "dev":
-		setConfig("./config/dev-config.yml")
+		// setConfig("./config/dev-config.yml")
+		setConfig("/home/bob/work/task/config/dev-config.yml")
 	case "stage":
-		log.Panic(fmt.Sprintf("Incorrect Dev Environment: %s\nInterrupt execution", env))
+		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
 	case "prod":
-		log.Panic(fmt.Sprintf("Incorrect Dev Environment: %s\nInterrupt execution", env))
+		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
 	default:
-		log.Panic(fmt.Sprintf("Incorrect Dev Environment: %s\nInterrupt execution", env))
+		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
 	}
 
 	// connect to db
@@ -69,6 +70,15 @@ func main() {
 	db.ORM.GetDB().AutoMigrate(
 		&models.Task{},
 	)
+
+	rv := reverse([]string{
+		"a",
+		"b",
+		"c",
+	})
+	for _, v := range rv {
+		println(v)
+	}
 
 	// run the server
 	fmt.Printf("Server is running on port %s", config.ServerConfigValues.Server.Port)
@@ -113,6 +123,12 @@ func main() {
 
 }
 
+func reverse(s []string) []string {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
+	return s
+}
 func setConfig(path string) {
 	f, err := os.Open(path)
 	if err != nil {

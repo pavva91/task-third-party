@@ -1,7 +1,6 @@
 package enums
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -25,7 +24,7 @@ func (t TaskStatus) Itoa() (str string) {
 	case 3:
 		return "error"
 	default:
-		log.Println(fmt.Sprintf("incorrect status: %d", t))
+		log.Printf("incorrect status: %d", t)
 		return "wrong_status"
 	}
 }

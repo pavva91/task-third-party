@@ -12,8 +12,6 @@ func NewRouter() {
 	Router = mux.NewRouter()
 
 	initializeRoutes()
-
-	return
 }
 
 func initializeRoutes() {

@@ -1,0 +1,18 @@
+[Unit]
+Description=Go task demo service
+After=network.target
+# After=psql.target
+StartLimitIntervalSec=0
+# StartLimitBurst=5
+# StartLimitIntervalSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Environment="SERVER_ENVIRONMENT=dev"
+ExecStart=/home/bob/work/task/bin/task-amd64-linux
+Restart=always
+RestartSec=1
+# Type=simple
+# User=systemd-resolve

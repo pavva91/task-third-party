@@ -44,7 +44,7 @@ func validateHttpHeaders(r *CreateTaskRequest) error {
 		case string:
 			// do nothing
 		default:
-			err := errors.New(fmt.Sprintf("key %v doesn't have a string value, is of value %v", k, t))
+			err := fmt.Errorf("key %v doesn't have a string value, is of value %v", k, t)
 			return err
 		}
 
@@ -94,7 +94,7 @@ func validateURL(r *CreateTaskRequest) error {
 		return err
 	}
 
-	if (u.Host[0] >= 0 && u.Host[0] <= 47) || (u.Host[0] >= 58 && u.Host[0] <= 64) || (u.Host[0] >= 91 && u.Host[0] <= 96) || u.Host[0] >= 123 {
+	if (u.Host[0] <= 47) || (u.Host[0] >= 58 && u.Host[0] <= 64) || (u.Host[0] >= 91 && u.Host[0] <= 96) || u.Host[0] >= 123 {
 		log.Println("first:", u.Host[0])
 		err := errors.New("insert url starting with char or number")
 		return err

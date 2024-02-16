@@ -67,17 +67,12 @@ func main() {
 
 	// connect to db
 	db.ORM.MustConnectToDB(config.ServerConfigValues)
-	db.ORM.GetDB().AutoMigrate(
+	err := db.ORM.GetDB().AutoMigrate(
 		&models.Task{},
 	)
-
-	rv := reverse([]string{
-		"a",
-		"b",
-		"c",
-	})
-	for _, v := range rv {
-		println(v)
+	if err != nil {
+		log.Panicln("error retrieving DB")
+		return
 	}
 
 	// run the server
@@ -114,7 +109,11 @@ func main() {
 	defer cancel()
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
-	srv.Shutdown(ctx)
+	err = srv.Shutdown(ctx)
+	if err != nil {
+		log.Panicln("error shutting down gracefully, panic")
+		return
+	}
 	// Optionally, you could run srv.Shutdown in a goroutine and block on
 	// <-ctx.Done() if your application should wait for other services
 	// to finalize based on context cancellation.
@@ -123,12 +122,6 @@ func main() {
 
 }
 
-func reverse(s []string) []string {
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		s[i], s[j] = s[j], s[i]
-	}
-	return s
-}
 func setConfig(path string) {
 	f, err := os.Open(path)
 	if err != nil {

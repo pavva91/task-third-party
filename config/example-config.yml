@@ -5,6 +5,7 @@ database:
   name: "<your-db-name>"
   user: "postgres"
   pass: "<your-db-pass>"
+  timezone: "<your-db-timezone>"
   connections: 10
 
 # Server configurations

@@ -36,12 +36,18 @@ func (s client) SendRequest(task *models.Task) (*models.Task, error) {
 
 	req, err := http.NewRequest(task.Method, task.URL, nil)
 	if err != nil {
+		log.Println(err)
+
 		task.Status = enums.Error
 		task.HttpStatusCode = -1
 		task.Length = -1
-		repositories.Task.UpdateTask(task)
 
-		log.Println(err)
+		_, dbErr := repositories.Task.UpdateTask(task)
+		if dbErr != nil {
+			log.Println(dbErr)
+			return nil, dbErr
+		}
+
 		return task, err
 	}
 	// headers := datatypes.JSONQuery("headers")
@@ -54,12 +60,18 @@ func (s client) SendRequest(task *models.Task) (*models.Task, error) {
 
 	res, err := client.Do(req)
 	if err != nil {
+		log.Println(err)
+
 		task.Status = enums.Error
 		task.HttpStatusCode = -1
 		task.Length = -1
-		repositories.Task.UpdateTask(task)
 
-		log.Println(err)
+		_, dbErr := repositories.Task.UpdateTask(task)
+		if dbErr != nil {
+			log.Println(dbErr)
+			return nil, dbErr
+		}
+
 		return task, err
 	}
 	defer res.Body.Close()
@@ -72,26 +84,45 @@ func (s client) SendRequest(task *models.Task) (*models.Task, error) {
 
 	resBodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
+		log.Println(err)
+
 		task.Status = enums.Error
 		task.HttpStatusCode = res.StatusCode
 		task.Length = -1
-		repositories.Task.UpdateTask(task)
 
-		log.Println(err)
+		_, dbErr := repositories.Task.UpdateTask(task)
+		if dbErr != nil {
+			log.Println(dbErr)
+			return nil, dbErr
+		}
+
 		return task, err
 	}
 
 	if res.StatusCode != 200 {
+		log.Println(err)
+
 		task.Status = enums.Error
 		task.HttpStatusCode = res.StatusCode
 		task.Length = len(resBodyBytes)
-		repositories.Task.UpdateTask(task)
+
+		_, dbErr := repositories.Task.UpdateTask(task)
+		if dbErr != nil {
+			log.Println(dbErr)
+			return nil, dbErr
+		}
+
 		return task, err
 	}
 
 	task.Status = enums.Done
 	task.HttpStatusCode = res.StatusCode
 	task.Length = len(resBodyBytes)
-	repositories.Task.UpdateTask(task)
+
+	_, err = repositories.Task.UpdateTask(task)
+	if err != nil {
+		log.Println(err)
+	}
+
 	return task, nil
 }

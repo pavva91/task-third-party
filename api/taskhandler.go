@@ -79,7 +79,10 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(js)
+	_, err = w.Write(js)
+	if err != nil {
+		log.Println(err)
+	}
 	w.Header().Set("Content-Type", "application/json")
 }
 
@@ -128,6 +131,10 @@ func (h tasksHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(js)
+	_, err = w.Write(js)
+	if err != nil {
+		log.Println(err)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 }

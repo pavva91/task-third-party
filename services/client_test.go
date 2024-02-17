@@ -66,7 +66,7 @@ func Test_SendRequest_Error_UpdateTaskError(t *testing.T) {
 }
 
 func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
-	wrongURL := "/wrong.url"
+	wrongURL := "/no.schema"
 	expectedError := fmt.Sprintf("Get \"%v\": unsupported protocol scheme \"\"", wrongURL)
 
 	taskStub := &models.Task{
@@ -143,6 +143,7 @@ func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 		}
 	})
 }
+
 func Test_SendRequest_Error_WrongSchemaURL(t *testing.T) {
 	wrongURL := "wrongschema://example.com"
 	expectedError := fmt.Sprintf("Get \"%v\": unsupported protocol scheme \"%v\"", wrongURL, "wrongschema")

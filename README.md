@@ -156,3 +156,29 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 ```bash
 golangci-lint run
 ```
+
+### Makefile
+
+Source: [https://www.alexedwards.net/blog/a-time-saving-makefile-for-your-go-projects](https://www.alexedwards.net/blog/a-time-saving-makefile-for-your-go-projects)
+Gist: [https://gist.github.com/alexedwards/3b40775846535d0014ab1ff477e4a568](https://gist.github.com/alexedwards/3b40775846535d0014ab1ff477e4a568)
+
+```bash
+SERVER_ENVIRONMENT="dev" make run
+```
+
+### Dockerfile
+
+Source 1: [https://docs.docker.com/develop/develop-images/dockerfile_best-practices/](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+Source 2: [https://hub.docker.com/\_/golang/](https://hub.docker.com/_/golang/)
+
+#### Build image
+
+```bash
+docker build -t my-golang-app .
+```
+
+#### Run docker container
+
+```bash
+docker run -it --rm --name my-running-app -e "SERVER_ENVIRONMENT=dev" -p 6060:8080 my-golang-app
+```

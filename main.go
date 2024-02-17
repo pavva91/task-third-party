@@ -55,8 +55,8 @@ func main() {
 
 	switch env {
 	case "dev":
-		// setConfig("./config/dev-config.yml")
-		setConfig("/home/bob/work/task/config/dev-config.yml")
+		setConfig("./config/dev-config.yml")
+		// setConfig("/home/bob/work/task/config/dev-config.yml")
 	case "stage":
 		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
 	case "prod":
@@ -76,8 +76,11 @@ func main() {
 	}
 
 	// run the server
-	fmt.Printf("Server is running on port %s", config.ServerConfigValues.Server.Port)
-	addr := fmt.Sprint("127.0.0.1:" + config.ServerConfigValues.Server.Port)
+	fmt.Printf("Server is running on host %s\n", config.ServerConfigValues.Server.Host)
+	fmt.Printf("Server is running on port %s\n", config.ServerConfigValues.Server.Port)
+	// addr := fmt.Sprint("127.0.0.1:" + config.ServerConfigValues.Server.Port)
+	// addr := fmt.Sprint("0.0.0.0:" + config.ServerConfigValues.Server.Port)
+	addr := fmt.Sprint(config.ServerConfigValues.Server.Host + ":" + config.ServerConfigValues.Server.Port)
 
 	srv := &http.Server{
 		// Addr: "0.0.0.0:8080",

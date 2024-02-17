@@ -62,7 +62,7 @@ func main() {
 	case "prod":
 		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
 	default:
-		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
+		log.Panicf("Incorrect Dev Environment: %s\nRun with environment variable: SERVER_ENVIRONMENT=\"dev\" go run main.go\nInterrupt execution", env)
 	}
 
 	// connect to db

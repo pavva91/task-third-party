@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pavva91/task-third-party/enums"
-	"github.com/pavva91/task-third-party/models"
-	"github.com/pavva91/task-third-party/repositories"
+	"github.com/pavva91/task-third-party/internal/enums"
+	"github.com/pavva91/task-third-party/internal/models"
+	"github.com/pavva91/task-third-party/internal/repositories"
 )
 
 var (

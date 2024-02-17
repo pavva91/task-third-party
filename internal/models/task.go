@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/pavva91/task-third-party/enums"
+	"github.com/pavva91/task-third-party/internal/enums"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )

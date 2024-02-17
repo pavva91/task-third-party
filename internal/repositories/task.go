@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"github.com/pavva91/task-third-party/db"
-	"github.com/pavva91/task-third-party/models"
+	"github.com/pavva91/task-third-party/internal/db"
+	"github.com/pavva91/task-third-party/internal/models"
 )
 
 var (

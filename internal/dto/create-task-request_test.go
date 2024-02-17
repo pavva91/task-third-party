@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/pavva91/task-third-party/models"
+	"github.com/pavva91/task-third-party/internal/models"
 	"gorm.io/datatypes"
 )
 

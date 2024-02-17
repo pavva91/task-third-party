@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/pavva91/task-third-party/models"
+	"github.com/pavva91/task-third-party/internal/models"
 )
 
 type CreateTaskResponse struct {

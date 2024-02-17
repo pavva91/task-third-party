@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"bytes"
@@ -11,11 +11,11 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
-	"github.com/pavva91/task-third-party/dto"
-	"github.com/pavva91/task-third-party/enums"
-	"github.com/pavva91/task-third-party/models"
-	"github.com/pavva91/task-third-party/services"
-	"github.com/pavva91/task-third-party/stubs"
+	"github.com/pavva91/task-third-party/internal/dto"
+	"github.com/pavva91/task-third-party/internal/enums"
+	"github.com/pavva91/task-third-party/internal/models"
+	"github.com/pavva91/task-third-party/internal/services"
+	"github.com/pavva91/task-third-party/internal/stubs"
 	"gorm.io/datatypes"
 	"gorm.io/gorm/logger"
 )

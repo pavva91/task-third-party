@@ -3,8 +3,8 @@ package services
 import (
 	"strconv"
 
-	"github.com/pavva91/task-third-party/models"
-	"github.com/pavva91/task-third-party/repositories"
+	"github.com/pavva91/task-third-party/internal/models"
+	"github.com/pavva91/task-third-party/internal/repositories"
 )
 
 var (

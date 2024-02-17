@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"encoding/json"
@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/pavva91/task-third-party/dto"
-	"github.com/pavva91/task-third-party/enums"
-	"github.com/pavva91/task-third-party/errorhandlers"
-	"github.com/pavva91/task-third-party/services"
+	"github.com/pavva91/task-third-party/internal/dto"
+	"github.com/pavva91/task-third-party/internal/enums"
+	"github.com/pavva91/task-third-party/internal/errorhandlers"
+	"github.com/pavva91/task-third-party/internal/services"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )

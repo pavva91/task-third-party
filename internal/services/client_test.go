@@ -7,10 +7,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pavva91/task-third-party/enums"
-	"github.com/pavva91/task-third-party/models"
-	"github.com/pavva91/task-third-party/repositories"
-	"github.com/pavva91/task-third-party/stubs"
+	"github.com/pavva91/task-third-party/internal/enums"
+	"github.com/pavva91/task-third-party/internal/models"
+	"github.com/pavva91/task-third-party/internal/repositories"
+	"github.com/pavva91/task-third-party/internal/stubs"
 	"gorm.io/datatypes"
 )
 

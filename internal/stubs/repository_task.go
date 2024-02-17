@@ -1,6 +1,6 @@
 package stubs
 
-import "github.com/pavva91/task-third-party/models"
+import "github.com/pavva91/task-third-party/internal/models"
 
 type TaskRepository struct {
 	CreateFn     func(*models.Task) (*models.Task, error)

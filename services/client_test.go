@@ -18,7 +18,6 @@ func Test_SendRequest_Error_UpdateTaskError(t *testing.T) {
 	expectedError := "stub error"
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        "",
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -71,7 +70,6 @@ func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 	expectedError := fmt.Sprintf("Get \"%v\": unsupported protocol scheme \"\"", wrongURL)
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        wrongURL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -81,7 +79,6 @@ func Test_SendRequest_Error_NoSchemaURL(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: wrongURL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",
@@ -151,7 +148,6 @@ func Test_SendRequest_Error_WrongSchemaURL(t *testing.T) {
 	expectedError := fmt.Sprintf("Get \"%v\": unsupported protocol scheme \"%v\"", wrongURL, "wrongschema")
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        wrongURL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -161,7 +157,6 @@ func Test_SendRequest_Error_WrongSchemaURL(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: wrongURL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",
@@ -232,7 +227,6 @@ func Test_SendRequest_Error_URLMissingSlash(t *testing.T) {
 	expectedError := fmt.Sprintf("Get \"%v\": http: no Host in request URL", wrongURL)
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        wrongURL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -242,7 +236,6 @@ func Test_SendRequest_Error_URLMissingSlash(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: wrongURL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",
@@ -320,7 +313,6 @@ func Test_SendRequest_Error500(t *testing.T) {
 	defer srv.Close()
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        srv.URL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -330,7 +322,6 @@ func Test_SendRequest_Error500(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: srv.URL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",
@@ -401,7 +392,6 @@ func Test_SendRequest_ThirdPartyDown(t *testing.T) {
 	srv.Close()
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        srv.URL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -411,7 +401,6 @@ func Test_SendRequest_ThirdPartyDown(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: srv.URL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",
@@ -502,7 +491,6 @@ func Test_SendRequest_OK200(t *testing.T) {
 	defer srv.Close()
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        srv.URL,
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -512,7 +500,6 @@ func Test_SendRequest_OK200(t *testing.T) {
 	}
 
 	expected := &models.Task{
-		ID:  1,
 		URL: srv.URL,
 		ResHeaders: datatypes.JSONMap(map[string]interface{}{
 			"Content-Length": "[0]",

@@ -3,10 +3,11 @@ package models
 import (
 	"github.com/pavva91/task-third-party/enums"
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 )
 
 type Task struct {
-	ID             uint
+	gorm.Model     `swaggerignore:"true"`
 	URL            string
 	Method         string
 	HttpStatusCode int

@@ -22,7 +22,6 @@ import (
 
 func Test_tasksHandler_GetByID(t *testing.T) {
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        "http://foo.bar",
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{
@@ -144,7 +143,6 @@ func Test_tasksHandler_GetByID(t *testing.T) {
 func Test_tasksHandler_CreateTask(t *testing.T) {
 
 	taskStub := &models.Task{
-		ID:         1,
 		URL:        "http://foo.bar",
 		ResHeaders: datatypes.JSONMap(make(map[string]interface{})),
 		ReqHeaders: datatypes.JSONMap(map[string]interface{}{

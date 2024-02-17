@@ -2,6 +2,8 @@
 
 [![Go](https://github.com/pavva91/task-third-party/actions/workflows/go.yml/badge.svg)](https://github.com/pavva91/task-third-party/actions/workflows/go.yml)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/pavva91/task-third-party)](https://goreportcard.com/report/github.com/pavva91/task-third-party)
+
 ## Description
 
 Write HTTP server for a service that would make http requests to 3rd-party

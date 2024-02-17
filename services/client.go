@@ -62,6 +62,8 @@ func (s client) SendRequest(task *models.Task) (*models.Task, error) {
 		log.Println(err)
 		return task, err
 	}
+	defer res.Body.Close()
+
 	log.Println("response status", res.Status)
 
 	for k, v := range res.Header {

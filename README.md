@@ -182,3 +182,12 @@ docker build -t my-golang-app .
 ```bash
 docker run -it --rm --name my-running-app -e "SERVER_ENVIRONMENT=dev" -p 6060:8080 my-golang-app
 ```
+
+### Docker Compose
+
+Run both db and go binary with a single docker-compose file:
+From the root of the project run:
+
+```bash
+docker compose up
+```

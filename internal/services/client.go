@@ -11,17 +11,7 @@ import (
 	"github.com/pavva91/task-third-party/internal/repositories"
 )
 
-var (
-	Client Clienter = client{}
-)
-
-type Clienter interface {
-	SendRequest(client *models.Task) (*models.Task, error)
-}
-
-type client struct{}
-
-func (s client) SendRequest(task *models.Task) (*models.Task, error) {
+func SendRequest(task *models.Task) (*models.Task, error) {
 
 	task.Status = enums.InProcess
 	_, err := repositories.Task.UpdateTask(task)

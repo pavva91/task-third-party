@@ -15,6 +15,7 @@ import (
 
 	"github.com/pavva91/task-third-party/config"
 	"github.com/pavva91/task-third-party/internal/db"
+	"github.com/pavva91/task-third-party/internal/middleware"
 	"github.com/pavva91/task-third-party/internal/models"
 	"github.com/pavva91/task-third-party/internal/router"
 
@@ -110,7 +111,8 @@ func main() {
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-		Handler:      router.Router, // Pass our instance of gorilla/mux in.
+		// Handler:      router.Router, // Pass our instance of gorilla/mux in.
+		Handler: middleware.Limit(router.Router), // Pass instance of gorilla/mux with http reqeusts limiter
 	}
 
 	// Run our server in a goroutine so that it doesn't block.

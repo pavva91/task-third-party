@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"gopkg.in/yaml.v2"
@@ -50,20 +51,39 @@ func main() {
 		httpSwagger.DomID("swagger-ui"),
 	)).Methods(http.MethodGet)
 
-	env := os.Getenv("SERVER_ENVIRONMENT")
+	useEnvVar := os.Getenv("USE_ENVVAR")
+	log.Printf("Using envvar value, must be USE_ENVVAR=\"true\" to run with environment variable, otherwise will use config file by default: %s", useEnvVar)
 
-	log.Printf("Running Environment: %s", env)
+	if useEnvVar == "true" {
+		conns, err := strconv.Atoi(os.Getenv("DB_CONNECTIONS"))
+		if err != nil {
+			log.Panicf("Incorrect DB connections, must be int: %s\nInterrupt execution", conns)
+		}
+		config.ServerConfigValues.Database.Connections = conns
+		config.ServerConfigValues.Database.Name = os.Getenv("DB_NAME")
+		config.ServerConfigValues.Database.Host = os.Getenv("DB_HOST")
+		config.ServerConfigValues.Database.Password = os.Getenv("DB_PASSWORD")
+		config.ServerConfigValues.Database.Port = os.Getenv("DB_PORT")
+		config.ServerConfigValues.Database.Username = os.Getenv("DB_USERNAME")
+		config.ServerConfigValues.Database.Timezone = os.Getenv("DB_TIMEZONE")
+		config.ServerConfigValues.Server.Host = os.Getenv("SERVER_HOST")
+		config.ServerConfigValues.Server.Port = os.Getenv("SERVER_PORT")
+	} else {
+		env := os.Getenv("SERVER_ENVIRONMENT")
 
-	switch env {
-	case "dev":
-		setConfig("./config/dev-config.yml")
-		// setConfig("/home/bob/work/task/config/dev-config.yml")
-	case "stage":
-		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
-	case "prod":
-		log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
-	default:
-		log.Panicf("Incorrect Dev Environment: %s\nRun with environment variable: SERVER_ENVIRONMENT=\"dev\" go run main.go\nInterrupt execution", env)
+		log.Printf("Running Environment: %s", env)
+
+		switch env {
+		case "dev":
+			setConfig("./config/dev-config.yml")
+			// setConfig("/home/bob/work/task/config/dev-config.yml")
+		case "stage":
+			log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
+		case "prod":
+			log.Panicf("Incorrect Dev Environment: %s\nInterrupt execution", env)
+		default:
+			log.Panicf("Incorrect Dev Environment: %s\nRun with environment variable: SERVER_ENVIRONMENT=\"dev\" go run main.go\nInterrupt execution", env)
+		}
 	}
 
 	// connect to db

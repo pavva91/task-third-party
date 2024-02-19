@@ -3,7 +3,16 @@ services:
     build: .
     container_name: go-server-stage
     environment:
-      - SERVER_ENVIRONMENT=${SERVER_ENVIRONMENT}
+      - USE_ENVVAR=true             
+      - DB_HOST=172.17.0.1
+      - DB_PORT=5432
+      - DB_NAME=task
+      - DB_TIMEZONE=Europe/London
+      - DB_CONNECTIONS=10
+      - DB_USERNAME=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
     ports:
       - "8080:8080"
     depends_on:
@@ -15,6 +24,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=task
+
     image: postgres
     ports:
       - "5432:5432"

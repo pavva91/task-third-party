@@ -69,6 +69,50 @@ I use PostgreSQL to persist data.
 
 ### Run
 
+#### 1. Copy `./example.env` into `./.env` and put your own values:
+
+```bash
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+#### 2. Build go docker image
+
+Build [Dockerfile](./Dockerfile)
+
+on root of the project run:
+
+```bash
+docker compose build
+```
+
+#### 3. Run everything
+
+Run [docker-compose.yml](./docker-compose.yml)
+
+on root of the project run:
+
+```bash
+docker compose up
+```
+
+#### Run Test Suite
+
+##### Run with coverage
+
+- Run all test suite and show coverage on browser: `go test ./... -coverprofile cover.out && go tool cover -html=cover.out`
+- Run tests of ./dto and show coverage on browser: `go test -v -coverprofile cover.out ./internal/dto/ && go tool cover -html=cover.out`
+- Run all test of the "dto" package and show coverage on browser: `go test ./internal/dto -coverprofile cover.out && go tool cover -html=cover.out`
+- Run test suite with "data race" detection : `go test --race ./...`
+
+##### Run all test suite
+
+```bash
+go test ./...
+```
+
+### Run Development Environment
+
 #### 1. Copy `./config/example-config.yml` into `./config/dev-config.yml` and put your own values
 
 #### 2. Create .env for PostgreSQL credentials in `./docker/dev/.env` with this structure:
@@ -89,21 +133,6 @@ docker-compose up -d
 
 ```bash
 SERVER_ENVIRONMENT="dev" go run main.go
-```
-
-#### Run Test Suite
-
-##### Run with coverage
-
-- Run all test suite and show coverage on browser: `go test ./... -coverprofile cover.out && go tool cover -html=cover.out`
-- Run tests of ./dto and show coverage on browser: `go test -v -coverprofile cover.out ./dto/ && go tool cover -html=cover.out`
-- Run all test of the "dto" package and show coverage on browser: `go test ./dto -coverprofile cover.out && go tool cover -html=cover.out`
-- Run test suite with "data race" detection : `go test --race ./...`
-
-##### Run all test suite
-
-```bash
-go test ./...
 ```
 
 ### Swagger API
@@ -192,4 +221,18 @@ From the root of the project run:
 
 ```bash
 docker compose up
+```
+
+### Systemd Daemon Unit
+
+#### Create symlink
+
+```bash
+sudo ln -s ~/work/task/daemons/gotask.service /etc/systemd/system/gotask.service
+```
+
+#### Start Service
+
+```bash
+sudo systemctl start gotask.service
 ```

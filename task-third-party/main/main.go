@@ -57,7 +57,7 @@ func main() {
 	if useEnvVar == "true" {
 		conns, err := strconv.Atoi(os.Getenv("DB_CONNECTIONS"))
 		if err != nil {
-			log.Panicf("Incorrect DB connections, must be int: %s\nInterrupt execution", conns)
+			log.Panicf("Incorrect DB connections, must be int: %s\nInterrupt execution", strconv.Itoa(conns))
 		}
 		config.ServerConfigValues.Database.Connections = conns
 		config.ServerConfigValues.Database.Name = os.Getenv("DB_NAME")

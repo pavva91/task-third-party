@@ -64,7 +64,8 @@ func (h tasksHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go func() {
-		_, err := services.SendRequest(task)
+		// _, err := services.SendRequest(task)
+		_, err := services.Task.SendRequest(task)
 		if err != nil {
 			log.Println(err)
 		}

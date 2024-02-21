@@ -157,8 +157,19 @@ func Test_tasksHandler_CreateTask(t *testing.T) {
 		return nil, errors.New("error")
 	}
 
+	stubFailReq := stubs.TaskService{}
+	stubFailReq.CreateFn = func(*models.Task) (*models.Task, error) {
+		return taskStub, nil
+	}
+	stubFailReq.SendRequestFn = func(*models.Task) (*models.Task, error) {
+		return nil, errors.New("request error")
+	}
+
 	stubOk := stubs.TaskService{}
 	stubOk.CreateFn = func(*models.Task) (*models.Task, error) {
+		return taskStub, nil
+	}
+	stubOk.SendRequestFn = func(*models.Task) (*models.Task, error) {
 		return taskStub, nil
 	}
 
@@ -195,6 +206,19 @@ func Test_tasksHandler_CreateTask(t *testing.T) {
 			true,
 			500,
 			"500 Internal Server Error",
+		},
+		"third paryt request error": {
+			args{
+				vars: map[string]string{},
+				reqBody: dto.CreateTaskRequest{
+					Method: "GET",
+					URL:    "http://example",
+				},
+			},
+			stubFailReq,
+			false,
+			200,
+			fmt.Sprintf(`{"id":%d}`, taskStub.ID),
 		},
 		"ok": {
 			args{

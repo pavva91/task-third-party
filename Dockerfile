@@ -8,7 +8,7 @@ RUN go mod download && go mod verify
 
 COPY . .
 # RUN go build -v -o /usr/local/bin/app ./...
-RUN go build -v -o /usr/local/bin/app ./task-third-party/main/main.go
+RUN go build -v -o /usr/local/bin/app main.go
 
 # Document that the service listens on port 8080.
 EXPOSE 8080

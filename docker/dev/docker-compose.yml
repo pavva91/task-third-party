@@ -3,6 +3,7 @@ services:
     build:
       context: ../../
       dockerfile: ./Dockerfile.dev
+    container_name: task-server-dev-3000
     working_dir: /project-package
     ports:
       - 3000:3000

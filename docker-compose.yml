@@ -5,8 +5,9 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     working_dir: /project-package
+    container_name: task-server-dev-3001
     ports:
-      - 3000:3000
+      - 3001:3001
     environment:
       - USE_ENVVAR=true             
       - DB_HOST=172.17.0.1
@@ -19,7 +20,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       # - DB_PASSWORD=postgres # for kompose
       - SERVER_HOST=0.0.0.0
-      - SERVER_PORT=3000
+      - SERVER_PORT=3001
     volumes:
       - .:/project-package/
     links:

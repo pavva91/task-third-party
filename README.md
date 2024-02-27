@@ -122,17 +122,12 @@ DB_USER=postgres
 DB_PASSWORD=postgres
 ```
 
-#### 3. Run PostgreSQL Docker Container
+#### 3. Run Docker Compose
+
+Runs PostgreSQL and Go application with air hot-reload.
 
 ```bash
-cd docker/dev
-docker-compose up -d
-```
-
-#### 4. Run Go Application
-
-```bash
-SERVER_ENVIRONMENT="dev" go run main.go
+docker-compose -f docker/dev/docker-compose.yml up
 ```
 
 ### Swagger API

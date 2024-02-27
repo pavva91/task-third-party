@@ -1,5 +1,32 @@
+version: "3.8"
 services:
-  server:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /project-package
+    ports:
+      - 3000:3000
+    environment:
+      - USE_ENVVAR=true             
+      - DB_HOST=172.17.0.1
+      - DB_PORT=5432
+      - DB_NAME=task
+      - DB_TIMEZONE=Europe/London
+      - DB_CONNECTIONS=10
+      - DB_USERNAME=${DB_USER}
+      # - DB_USERNAME=postgres # for kompose
+      - DB_PASSWORD=${DB_PASSWORD}
+      # - DB_PASSWORD=postgres # for kompose
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=3000
+    volumes:
+      - .:/project-package/
+    links:
+      - db
+    depends_on:
+      - db
+  web:
     build: .
     container_name: task-server
     # for kompose
@@ -20,6 +47,8 @@ services:
       - SERVER_PORT=8080
     ports:
       - "8080:8080"
+    links:
+      - db
     depends_on:
       - db
   db:
@@ -37,4 +66,3 @@ services:
       - "5432:5432"
     volumes:
       - ./data/db:/var/lib/postgres/data
-version: "3.8"

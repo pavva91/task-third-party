@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  DB_PASSWORD: postgres
+  DB_USER: postgres
+  SERVER_ENVIRONMENT: dev
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: db-env
+  name: env

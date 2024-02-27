@@ -236,3 +236,18 @@ sudo ln -s ~/work/task/daemons/gotask.service /etc/systemd/system/gotask.service
 ```bash
 sudo systemctl start gotask.service
 ```
+
+## Kubernetes
+
+Use kompose to convert docker-compose into k8s configurations.
+From project root do:
+
+```bash
+kompose covert /folder/to/store/k8s/configs
+```
+
+# Deploy to kubernetes
+
+```bash
+kubectl apply -f /folder/to/store/k8s/configs
+```

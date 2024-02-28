@@ -38,7 +38,6 @@ func main() {
 	if len(os.Args) == 2 {
 		debugArg := os.Args[1]
 		if debugArg == "d" || debugArg == "debug" {
-			// os.Setenv("SERVER_ENVIRONMENT", "dev")
 			isDebug = true
 			setConfig("./docker/debug/debug-config.yml")
 		}
@@ -139,7 +138,7 @@ func setupEnvVars() error {
 }
 
 func setupEnvVarsDebug() {
-	setConfig("./config/dev-config.yml")
+	setConfig("./config/debug-config.yml")
 }
 
 func setConfig(path string) {

@@ -1,4 +1,5 @@
 # Programming Challenge: third party task
+
 ![Coverage](https://img.shields.io/badge/Coverage-74.0%25-brightgreen)
 
 [![Go](https://github.com/pavva91/task-third-party/actions/workflows/go.yml/badge.svg)](https://github.com/pavva91/task-third-party/actions/workflows/go.yml)
@@ -130,6 +131,17 @@ Runs PostgreSQL and Go application with air hot-reload.
 ```bash
 docker-compose -f docker/dev/docker-compose.yml up
 ```
+
+### Run Debugger (DAP)
+
+With open buffer: ./main.go
+
+- :DapContinue (<F5>): Start debug session
+- 2 : Debug (Arguments)
+- Pass 'd' as argument
+
+Debug will use port 3001
+Debug will use "dev-db" as DB
 
 ### Swagger API
 

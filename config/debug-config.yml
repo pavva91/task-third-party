@@ -1,0 +1,20 @@
+# Debug will attach to "dev-db"
+database:
+  # host: "172.17.0.1"
+  host: "localhost"
+  port: 5434
+  name: "task"
+  user: "postgres"
+  pass: "postgres"
+  timezone: "Europe/London"
+  connections: 10
+
+server:
+  api-path: "api"
+  api-version: "v1"
+  cors-allowed-clients: []
+  environment: "dev"
+  host: "0.0.0.0"
+  # host: "localhost"
+  port: 3001
+  protocol: "http"

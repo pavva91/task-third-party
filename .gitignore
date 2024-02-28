@@ -1,4 +1,5 @@
 config/dev-config.yml
 docker/dev/.env
-cover.out
+*.out
 .env
+tmp

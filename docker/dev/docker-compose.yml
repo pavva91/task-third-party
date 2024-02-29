@@ -1,5 +1,6 @@
 services:
   server:
+    container_name: dev-task-server
     build:
       context: ../../
       dockerfile: ./Dockerfile.dev

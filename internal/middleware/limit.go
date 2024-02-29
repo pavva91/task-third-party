@@ -6,7 +6,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
-var limiter = rate.NewLimiter(10, 5)
+var limiter = rate.NewLimiter(20, 10)
 
 func Limit(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

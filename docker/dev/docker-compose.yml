@@ -1,40 +1,38 @@
 services:
-  dev:
+  server:
     build:
       context: ../../
       dockerfile: ./Dockerfile.dev
     container_name: task-server-dev-3000
-    working_dir: /project-package
+    working_dir: /project-repo
     ports:
       - 3000:3000
     environment:
       - USE_ENVVAR=true             
-      - DB_HOST=172.17.0.1
-      - DB_PORT=5434
+      # - DB_HOST=172.17.0.1
+      - DB_HOST=dev-task-db
+      # - DB_HOST=db
+      - DB_PORT=5432
       - DB_NAME=task
       - DB_TIMEZONE=Europe/London
       - DB_CONNECTIONS=10
       - DB_USERNAME=${DB_USER}
-      # - DB_USERNAME=postgres # for kompose
       - DB_PASSWORD=${DB_PASSWORD}
-      # - DB_PASSWORD=postgres # for kompose
       - SERVER_HOST=0.0.0.0
       - SERVER_PORT=3000
     volumes:
-      - ../../:/project-package/
-    links:
-      - db
+      - ../../:/project-repo/
     depends_on:
       - db
   db:
+    image: postgres:16.2-alpine3.19
     build: .
     env_file: .env
-    container_name: dev-db
+    container_name: dev-task-db
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=task
-    image: postgres
     ports:
       - "5434:5432"
     volumes:

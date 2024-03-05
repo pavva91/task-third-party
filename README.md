@@ -196,6 +196,12 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 golangci-lint run
 ```
 
+##### Run Fix
+
+```bash
+golangci-lint run --fix
+```
+
 ### Makefile
 
 Source: [https://www.alexedwards.net/blog/a-time-saving-makefile-for-your-go-projects](https://www.alexedwards.net/blog/a-time-saving-makefile-for-your-go-projects)

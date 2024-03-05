@@ -1,6 +1,6 @@
 # Programming Challenge: third party task
 
-![Coverage](https://img.shields.io/badge/Coverage-74.5%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-74.0%25-brightgreen)
 
 [![Go](https://github.com/pavva91/task-third-party/actions/workflows/go.yml/badge.svg)](https://github.com/pavva91/task-third-party/actions/workflows/go.yml)
 
